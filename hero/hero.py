@@ -1,10 +1,9 @@
-from weapon import Weapon
-from spell import Spell
+from attacksource import Weapon, Spell
 
 
 class Hero:
     def __init__(self, **kwargs):
-        for key, value in kwargs:
+        for key, value in kwargs.items():
             setattr(self, key, value)
         self.max_health = self.health
         self.max_mana = self.mana
