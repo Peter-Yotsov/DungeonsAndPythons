@@ -72,9 +72,9 @@ class Hero:
 
     def attack(self, *, by):
         damage = 0
-        if by == 'weapon':
+        if by == 'weapon' and type(self.current_weapon) is not str:
             damage = self.current_weapon.damage
-        elif by == 'spell':
+        elif by == 'spell' and type(self.current_spell) is not str:
             if self.can_cast():
                 damage = self.current_spell.damage
                 self.mana -= self.current_spell.mana_cost
