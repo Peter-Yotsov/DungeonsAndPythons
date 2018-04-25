@@ -1,5 +1,7 @@
 import unittest
-from hero import Hero, Weapon, Spell
+from hero import Hero
+from attacksource.weapon import Weapon
+from attacksource.spell import Spell
 
 
 class TestHero(unittest.TestCase):
