@@ -1,7 +1,5 @@
-import sys
-sys.path.insert(0, '/home/peter/Py101/week07/d1/DungeonsAndPythons')
-from attacksource.weapon import Weapon
-from attacksource.spell import Spell
+from weapon import Weapon
+from spell import Spell
 
 
 class Hero:
