@@ -1,14 +1,18 @@
-from attacksource import Weapon, Spell
+from weapon import Weapon
+from spell import Spell
 
 
 class Hero:
-    def __init__(self, **kwargs):
-        for key, value in kwargs.items():
-            setattr(self, key, value)
+    def __init__(self, *, name, title, health, mana, mana_regeneration_rate):
+        self.name = name
+        self.title = title
+        self.health = health
+        self.mana = mana
+        self.mana_regeneration_rate = mana_regeneration_rate
         self.max_health = self.health
         self.max_mana = self.mana
-        self.attack_weapon = 0
-        self.attack_spell = 0
+        self.current_weapon = 'No weapon'
+        self.current_spell = 'No spell'
 
     def known_as(self):
         return '{} the {}'.format(self.name, self.title)
@@ -26,10 +30,14 @@ class Hero:
         return self.mana
 
     def can_cast(self):
-        pass
+        if type(self.current_spell) is not str:
+            if self.current_spell.mana_cost <= self.mana:
+                return True
+
+        return False
 
     def take_damage(self, damage):
-        self.health -= self.damage
+        self.health -= damage
         if self.health < 0:
             self.health = 0
 
@@ -54,17 +62,21 @@ class Hero:
 
     def equip(self, weapon):
         if isinstance(weapon, Weapon):
-            self.attack_weapon = weapon.damage
+            self.current_weapon = weapon
 
     def learn(self, spell):
         if isinstance(spell, Spell):
-            self.attack_spell = spell.damage
+            self.current_spell = spell
 
-    def attack(self, *by):
+    def attack(self, *, by):
         damage = 0
-        if by == 'weapon':
-            damage == self.attack_weapon
-        elif by == 'magic':
-            damage == self.attack_spell
-
+        if by == 'weapon' and type(self.current_weapon) is not str:
+            damage = self.current_weapon.damage
+        elif by == 'spell' and type(self.current_spell) is not str:
+            if self.can_cast():
+                damage = self.current_spell.damage
+                self.mana -= self.current_spell.mana_cost
+            else:
+                print('Not enough mana to cast {}'.
+                      format(self.current_spell.name))
         return damage
