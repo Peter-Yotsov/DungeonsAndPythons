@@ -1,9 +1,17 @@
 from coordinates import Coordinates
 from random import random
 
+
 class Dungeon:
     treasures = []
-    dict_ = {'start': 'S', 'end': 'G', 'obstacle': '#', 'walkable': '.', 'treasure': 'T', 'enemy': 'E', 'hero': 'H'}
+    dict_ = {'start': 'S',
+             'end': 'G',
+             'obstacle': '#',
+             'walkable': '.',
+             'treasure': 'T',
+             'enemy': 'E',
+             'hero': 'H'
+             }
 
     def __init__(self, filename):
         self.filename = filename
@@ -27,34 +35,39 @@ class Dungeon:
                     return True
 
     def spawn(self, hero):
-        if self.coordinates.row == None:
+        if self.coordinates.row is None:
             self.initial_spawn()
 
         for i in range(len(self.map)):
                 for j in range(len(self.map[i])):
                     if self.map[i][j] == self.dict_['walkable']:
                         self.map[i][j] = 'H'
-                        yield True                
+                        yield True
 
     def is_inside_map(self, coordinates):
-        return coordinates.row >= 0 and coordinates.row < len(self.map[0])
-                and coordinates.column >= 0 and coordinates.column <= len(self.map)
+        return coordinates.row >= 0 and coordinates.row < len(self.map[0])\
+            and coordinates.column >= 0\
+            and coordinates.column <= len(self.map)
 
     def new_coordinates(self, direction):
         if direction == 'up':
-            new_coordinates = Coordinates(self.hero_coords.row + 1, self.hero_coords.column)
+            new_coordinates = Coordinates(self.hero_coords.row + 1,
+                                          self.hero_coords.column)
         elif direction == 'down':
-            new_coordinates = Coordinates(self.hero_coords.row - 1, self.hero_coords.column)
+            new_coordinates = Coordinates(self.hero_coords.row - 1,
+                                          self.hero_coords.column)
         elif direction == 'left':
-            new_coordinates = Coordinates(self.hero_coords.row, self.hero_coords.column - 1)
+            new_coordinates = Coordinates(self.hero_coords.row,
+                                          self.hero_coords.column - 1)
         else:
-            new_coordinates = Coordinates(self.hero_coords.row, self.hero_coords.column + 1)
+            new_coordinates = Coordinates(self.hero_coords.row,
+                                          self.hero_coords.column + 1)
 
         return new_coordinates
 
-##mana, healthpotion, weapon, spell 
+# mana, healthpotion, weapon, spell
     def pick_treasure(self):
-        pass ##TODO
+        pass  # TODO
 
     def move_hero_from_to(self, coord_from, coord_to):
         self.map[coord_from.row][coord_from.column] = self.dict_['walkable']
@@ -66,15 +79,14 @@ class Dungeon:
 
         if not self.is_inside_map(new_coord):
             return False
-        elif self.map[new_coord.row][new_coord.column] == Dungeon.dict_['obstacle']:
+        elif self.map[new_coord.row][new_coord.column] ==\
+                Dungeon.dict_['obstacle']:
             return False
-        elif self.map[new_coord.row][new_coord.column] == Dungeon.dict_['enemy']:
-            pass ##TODO
-        elif self.map[new_coord.row][new_coord.column] == Dungeon.dict_['treasure']:
+        elif self.map[new_coord.row][new_coord.column] ==\
+                Dungeon.dict_['enemy']:
+            pass  # TODO
+        elif self.map[new_coord.row][new_coord.column] ==\
+                Dungeon.dict_['treasure']:
             self.pick_treasure()
             self.move_hero_from_to(self.hero_coords, new_coord)
             return True
-
-
-if __name__ == '__main__':
-    main()

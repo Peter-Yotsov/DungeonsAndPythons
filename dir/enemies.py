@@ -19,7 +19,8 @@ class Enemy:
 
     def take_healing(self, healig_points):
         if self.is_alive():
-            self.current_health = max(self.current_health + healig_points, self.health)
+            self.current_health = max(self.current_health + healig_points,
+                                      self.health)
             return True
         else:
             return False
@@ -38,7 +39,8 @@ class Enemy:
 
     def take_damage(self, damage):
         if type(damage) is not int and type(damage) is not float:
-            raise TypeError("The type of damage points must be integer or float!")
+            raise TypeError("The type of damage points\
+                             must be integer or float!")
 
         self.current_health = self.current_health - damage
 
