@@ -19,6 +19,8 @@ class EnemiesTests(unittest.TestCase):
 
     def test_take_healing(self):
         self.assertTrue(self.enemy.take_healing(1))
+        self.enemy.take_healing(5)
+        self.assertEqual(self.enemy.get_health, 100)
         self.enemy.take_damage(101)
         self.assertFalse(self.enemy.take_healing(1))
 

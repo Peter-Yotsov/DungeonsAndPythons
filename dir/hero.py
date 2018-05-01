@@ -18,10 +18,7 @@ class Hero:
         return '{} the {}'.format(self.name, self.title)
 
     def is_alive(self):
-        if self.health > 0:
-            return True
-        else:
-            return False
+        return self.health > 0
 
     def get_health(self):
         return self.health
@@ -31,8 +28,7 @@ class Hero:
 
     def can_cast(self):
         if type(self.current_spell) is not str:
-            if self.current_spell.mana_cost <= self.mana:
-                return True
+            return self.current_spell.mana_cost <= self.mana
 
         return False
 
@@ -45,9 +41,7 @@ class Hero:
 
     def take_healing(self, healing):
         if self.is_alive():
-            self.health += healing
-            if self.health >= self.max_health:
-                self.health = self.max_health
+            self.health = min(self.health + healing, self.max_health)
             return True
         else:
             return False
@@ -56,9 +50,7 @@ class Hero:
         if mana_potion == 0:
             self.mana += self.mana_regeneration_rate
         else:
-            self.mana += mana_potion
-        if self.mana > self.max_mana:
-            self.mana = self.max_mana
+            self.mana = min(self.mana + mana_potion, self.max_mana)
 
     def equip(self, weapon):
         if isinstance(weapon, Weapon):

@@ -19,7 +19,7 @@ class Enemy:
 
     def take_healing(self, healig_points):
         if self.is_alive():
-            self.current_health = max(self.current_health + healig_points,
+            self.current_health = min(self.current_health + healig_points,
                                       self.health)
             return True
         else:
@@ -49,7 +49,3 @@ class Enemy:
 
     def learn(self, spell):
         self.spell = spell
-
-
-if __name__ == '__main__':
-    main()
