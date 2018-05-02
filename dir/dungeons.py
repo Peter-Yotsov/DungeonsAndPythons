@@ -17,7 +17,7 @@ class Dungeon:
         self.filename = filename
         self.map = []
         self.load_map()
-        self.hero_coords = Coordinates(None, None)
+        self.coordiantes = Coordinates(None, None)
 
     def load_map(self):
         with open(self.filename, 'r') as f:
@@ -59,7 +59,7 @@ class Dungeon:
         elif direction == 'left':
             new_coordinates = Coordinates(self.hero_coords.row,
                                           self.hero_coords.column - 1)
-        else:
+        elif direction == 'right':
             new_coordinates = Coordinates(self.hero_coords.row,
                                           self.hero_coords.column + 1)
 
