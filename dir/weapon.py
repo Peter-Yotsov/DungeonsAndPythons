@@ -4,4 +4,7 @@ class Weapon:
         self.damage = damage
 
     def __repr__(self):
+        return str(self)
+
+    def __str__(self):
         return '{} deals {} damage.'.format(self.name, self.damage)

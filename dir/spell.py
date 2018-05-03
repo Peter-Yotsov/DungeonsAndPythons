@@ -6,6 +6,9 @@ class Spell:
         self.cast_range = cast_range
 
     def __repr__(self):
-        return 'The {} spell deals {} damage,\
+        return str(self)
+
+    def __str__(self):
+    	return 'The {} spell deals {} damage,\
          costs {} mana and has a cast range of {}'\
          .format(self.name, self.damage, self.mana_cost, self.cast_range)
