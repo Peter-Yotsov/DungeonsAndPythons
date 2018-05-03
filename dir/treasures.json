@@ -1,0 +1,26 @@
+{
+    "Weapon": [
+        {
+            "name": "a",
+            "damage": 15
+        },
+        {
+            "name": "b",
+            "damage": 10
+        }
+    ],
+    "Spell": [
+        {
+            "name": "a",
+            "damage": 20,
+            "mana_cost": 5,
+            "cast_range": 1
+        },
+        {
+            "name": "b",
+            "damage": 25,
+            "mana_cost": 10,
+            "cast_range": 2
+        }
+    ]
+}
