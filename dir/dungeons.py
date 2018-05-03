@@ -31,7 +31,7 @@ class Dungeon:
         print("\n".join(self.map))
 
     def change_coordinates_in_map(self, row, index, new_char):
-        new_row = '{}{}{}'.format(self.map[row][:index], new_char, self.map[index + 1:])
+        new_row = '{}{}{}'.format(self.map[row][:index], new_char, self.map[row][index + 1:])
         self.map[row] = new_row
 
     def initial_spawn(self, hero):
@@ -44,16 +44,21 @@ class Dungeon:
                     self.hero_coords = Coordinates(i, j)
                     return True
 
-    def spawn(self, hero):
-        if self.hero_coords.row is None:
-            self.initial_spawn(hero)
-
+    def next_spawn(self):
         for i in range(len(self.map)):
                 for j in range(len(self.map[i])):
                     if self.map[i][j] == self.dict_['walkable']:
-                        self.change_coordinates_in_map(i, j, Dungeon.dict_['hero'])
-                        self.hero_coords = Coordinates(i, j)
-                        yield True
+                        yield Coordinates(i, j)
+
+    def spawn(self, hero):
+        if self.hero_coords.row is None:
+            return self.initial_spawn(hero)
+
+        spawn_coords = self.next_spawn()
+        for i in spawn_coords:
+            self.hero_coords = i
+            self.change_coordinates_in_map(i.row, i.column, Dungeon.dict_['hero'])
+            return True
 
     def is_inside_map(self, coordinates):
         return coordinates.row >= 0 and coordinates.row < len(self.map)\
@@ -62,10 +67,10 @@ class Dungeon:
 
     def new_coordinates(self, direction):
         if direction == 'up':
-            new_coordinates = Coordinates(self.hero_coords.row + 1,
+            new_coordinates = Coordinates(self.hero_coords.row - 1,
                                           self.hero_coords.column)
         elif direction == 'down':
-            new_coordinates = Coordinates(self.hero_coords.row - 1,
+            new_coordinates = Coordinates(self.hero_coords.row + 1,
                                           self.hero_coords.column)
         elif direction == 'left':
             new_coordinates = Coordinates(self.hero_coords.row,
@@ -92,13 +97,13 @@ class Dungeon:
             data = json.load(f)
 
         if treasures[num] == 'weapon':
-            random_weapon = randint(0, len(data['Weapon']))
-            w = Weapon(data['Weapon'][random_weapon])
+            random_weapon = randint(0, len(data['Weapon']) - 1)
+            w = Weapon(**data['Weapon'][random_weapon])
             self.hero.equip(w)
             return 'Found weapon: {}'.format(str(w))
         else:
-            random_spell = randint(0, len(data['Spell']))
-            s = Spell(data['Spell'][random_spell])
+            random_spell = randint(0, len(data['Spell']) - 1)
+            s = Spell(**data['Spell'][random_spell])
             self.hero.learn(s)
             return 'Found spell: {}'.format(str(s))
 
@@ -108,8 +113,8 @@ class Dungeon:
 
         move = [[0, 1], [1, 0], [0, -1], [-1, 0]]
 
-        for i in range(1, self.hero.current_spell.cast_range):
-            for j in move: 
+        for i in range(1, self.hero.current_spell.cast_range + 1):
+            for j in move:
                 coords = Coordinates(j[0] * i, j[1] * i)
                 if self.is_inside_map(coords) and self.map[coords.row][coords.column] ==\
                         Dungeon.dict_['enemy']:
@@ -150,5 +155,9 @@ class Dungeon:
         elif self.map[new_coord.row][new_coord.column] ==\
                 Dungeon.dict_['treasure']:
             print(self.pick_treasure())
+            self.move_hero_from_to(self.hero_coords, new_coord)
+            return True
+        elif self.map[new_coord.row][new_coord.column] ==\
+                Dungeon.dict_['walkable']:
             self.move_hero_from_to(self.hero_coords, new_coord)
             return True
